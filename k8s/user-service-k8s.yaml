@@ -34,7 +34,7 @@ spec:
         - name: MYSQL_DATABASE
           value: "users"
         - name: MYSQL_USER
-          value: "user"
+          value: "app"
         - name: MYSQL_PASSWORD
           value: "ecvbjkl9876t"
         - name: ELASTIC_APM_ACTIVE
@@ -61,10 +61,14 @@ spec:
             memory: "128Mi"
             cpu: "1"
         env:
-          MYSQL_ROOT_PASSWORD: qazxsw
-          MYSQL_DATABASE: users
-          MYSQL_USER: app
-          MYSQL_PASSWORD: ecvbjkl9876t
+        - name: MYSQL_ROOT_PASSWORD
+          value: qazxsw
+        - name: MYSQL_DATABASE
+          value: users
+        - name: MYSQL_USER
+          value: app
+        - name: MYSQL_PASSWORD
+          value: ecvbjkl9876t
         ports:
         - containerPort: 3306
 ---
