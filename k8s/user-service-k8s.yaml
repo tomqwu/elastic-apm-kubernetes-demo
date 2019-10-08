@@ -1,41 +1,46 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: elastic-apm-demo
-  labels:
-    app: elastic-apm-demo
+  name: elastic-user-service-demo
+    app: elastic-user-service-demo
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: elastic-apm-demo
+      app: elastic-user-service-demo
   template:
     metadata:
       labels:
-        app: elastic-apm-demo
+        app: elastic-user-service-demo
     spec:
       containers:
-      - name: elastic-apm-demo
-        image: tomqwu/voter-service:api
+      - name: elastic-user-service-demo
+        image: tomqwu/user-service:1.0.0
         imagePullPolicy: Always
         ports:
-        - containerPort: 8099
+        - containerPort: 8080
         resources:
           requests:
             memory: "128Mi"
             cpu: "500m"
           limits:
-            memory: "256Mi"
+            memory: "128Mi"
             cpu: "1"
         env:
         - name: SPRING_PROFILE
           value: poc
-        - name: MONGODB_HOST
+        - name: MYSQL_HOST
           value: localhost
+        - name: MYSQL_DATABASE
+          value: "users"
+        - name: MYSQL_USER
+          value: "user"
+        - name: MYSQL_PASSWORD
+          value: "ecvbjkl9876t"
         - name: ELASTIC_APM_ACTIVE
           value: "true"
         - name: ELASTIC_APM_APPLICATION_PACKAGES
-          value: "org.example,org.example"
+          value: "com.example,org.example"
         - name: ELASTIC_APM_SERVICE_NAME
           value: "service-user"
         - name: ELASTIC_APM_SERVER_URLS
@@ -44,42 +49,36 @@ spec:
           value: "false"
         - name: ELASTIC_APM_SECRET_TOKEN
           value: "c92cq56gnjmkrr44vb566qwh"
-      - name: voter-service-nginx-api
-        image: tomqwu/voter-service-nginx:1
+      - name: mysql
+        image: mysql:8
         imagePullPolicy: Always
-        ports:
-        - containerPort: 80
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "250m"
-          limits:
-            memory: "256Mi"
-            cpu: "500m"
-        env:
-        - name: UPSTREAM_HOSTNAME
-          value: localhost
-      - name: mongodb-api
-        image: mongo
+        command: --default-authentication-plugin=mysql_native_password
         resources:
           requests:
             memory: "128Mi"
             cpu: "500m"
           limits:
-            memory: "256Mi"
+            memory: "128Mi"
             cpu: "1"
+        env:
+          MYSQL_ROOT_PASSWORD: qazxsw
+          MYSQL_DATABASE: users
+          MYSQL_USER: app
+          MYSQL_PASSWORD: ecvbjkl9876t
+        ports:
+        - containerPort: 3306
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: elastic-apm-demo
+  name: elastic-user-service-demo
   annotations:
     service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
 spec:
   selector:
-    app: elastic-apm-demo
+    app: elastic-user-service-demo
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 80
+      targetPort: 8080
   type: LoadBalancer
