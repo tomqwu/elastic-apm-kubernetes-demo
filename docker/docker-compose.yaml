@@ -14,6 +14,10 @@ services:
       - "ELASTIC_APM_SERVICE_NAME=user-service"
       - "ELASTIC_APM_APPLICATION_PACKAGES=com.example.demo"
       - "ELASTIC_APM_SERVER_URLS=http://apm:8200"
+      - "MYSQL_HOST=mysql"
+      - "MYSQL_DATABASE=users"
+      - "MYSQL_USER=app"
+      - "MYSQL_PASSWORD=ecvbjkl9876t"
     ports:
       - 8080:8080
     links:
