@@ -10,4 +10,8 @@ ARG JAR_PATH
 
 COPY $JAR_PATH /opt/app
 
-CMD java $JVM_OPTIONS -jar $JAR_NAME
+COPY init.sh /opt/app/
+
+RUN chmod +x /opt/app/init.sh
+
+ENTRYPOINT [ "/opt/app/init.sh" ]
