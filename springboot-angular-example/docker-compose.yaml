@@ -4,4 +4,7 @@ services:
     build: ./springboot/
     ports:
       - 8080:8080
-  
+  angular:
+    build: ./angularclient/
+    ports:
+      - 4200:4200

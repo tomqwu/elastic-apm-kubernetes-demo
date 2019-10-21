@@ -7,7 +7,7 @@
         "vscjava.vscode-spring-boot-dashboard",
         "pivotal.vscode-boot-dev-pack"
 	],
-	"appPort": [8080, 4200],
+	"appPort": [4200],
 	"runArgs": ["-v","/var/run/docker.sock:/var/run/docker.sock"]
 	// "runArgs": [
 	// 	"-v",
