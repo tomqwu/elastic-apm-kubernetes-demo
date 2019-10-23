@@ -14,4 +14,5 @@ COPY . .
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+CMD ["/usr/src/app/docker-init.sh"]
+

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../model/user';
 // import { Observable } from 'rxjs/Observable';
 import { Observable, Subject, asapScheduler, pipe, of, from, interval, merge, fromEvent } from 'rxjs';
+import { environment } from '../../environments/environment'
 
 @Injectable()
 export class UserService {
@@ -10,7 +11,7 @@ export class UserService {
   private usersUrl: string;
 
   constructor(private http: HttpClient) {
-    this.usersUrl = 'http://localhost:8080/users';
+    this.usersUrl = environment.usersUrl;
   }
 
   public findAll(): Observable<User[]> {
@@ -21,4 +22,3 @@ export class UserService {
     return this.http.post<User>(this.usersUrl, user);
   }
 }
-  

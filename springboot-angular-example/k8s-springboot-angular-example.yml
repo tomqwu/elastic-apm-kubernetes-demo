@@ -28,6 +28,8 @@ spec:
         #     memory: "512Mi"
         #     cpu: "1"
         env:
+        - name: ANGULAR_UPSTREAM_URL
+          value: "http://localhost:4200"
         - name: ELASTIC_APM_ACTIVE
           value: "true"
         - name: ELASTIC_APM_APPLICATION_PACKAGES
@@ -54,6 +56,8 @@ spec:
         #     memory: "256Mi"
         #     cpu: "1"
         env:
+        - name: USERS_URL
+          value: "http://localhost:8080/users"
         - name: ELASTIC_APM_ACTIVE
           value: "true"
         - name: ELASTIC_APM_APPLICATION_PACKAGES
