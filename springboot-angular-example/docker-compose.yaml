@@ -2,9 +2,11 @@ version: "2.4"
 services:
   springboot: 
     build: ./springboot/
+    image: tomqwu/springboot-angular-example-springboot
     ports:
       - 8080:8080
   angular:
     build: ./angularclient/
+    image: tomqwu/springboot-angular-example-angular-client
     ports:
       - 4200:4200

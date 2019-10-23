@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: elastic-user-service-demo
+  labels:
     app: elastic-user-service-demo
 spec:
   replicas: 1

@@ -1,0 +1,91 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: springboot-angular-example
+  labels:
+    app: springboot-angular-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: springboot-angular-example
+  template:
+    metadata:
+      labels:
+        app: springboot-angular-example
+    spec:
+      containers:
+      - name: springboot
+        image: tomqwu/springboot-angular-example-springboot:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+        # resources:
+        #   requests:
+        #     memory: "256Mi"
+        #     cpu: "500m"
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "1"
+        env:
+        - name: ELASTIC_APM_ACTIVE
+          value: "true"
+        - name: ELASTIC_APM_APPLICATION_PACKAGES
+          value: "com.example,org.example"
+        - name: ELASTIC_APM_SERVICE_NAME
+          value: "angular-springboot-apm-example-springboot"
+        - name: ELASTIC_APM_SERVER_URLS
+          value: "https://apm-server-quickstart-apm-http:8200/"
+        - name: ELASTIC_APM_VERIFY_SERVER_CERT
+          value: "false"
+        - name: ELASTIC_APM_SECRET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: apm-server-quickstart-apm-token
+              key: secret-token
+      - name: angular
+        image: tomqwu/springboot-angular-example-angular-client:latest
+        imagePullPolicy: Always
+        # resources:
+        #   requests:
+        #     memory: "128Mi"
+        #     cpu: "500m"
+        #   limits:
+        #     memory: "256Mi"
+        #     cpu: "1"
+        env:
+        - name: ELASTIC_APM_ACTIVE
+          value: "true"
+        - name: ELASTIC_APM_APPLICATION_PACKAGES
+          value: "com.example,org.example"
+        - name: ELASTIC_APM_SERVICE_NAME
+          value: "angular-springboot-apm-example-angular-client"
+        - name: ELASTIC_APM_SERVER_URLS
+          value: "https://apm-server-quickstart-apm-http:8200/"
+        - name: ELASTIC_APM_VERIFY_SERVER_CERT
+          value: "false"
+        - name: ELASTIC_APM_SECRET_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: apm-server-quickstart-apm-token
+              key: secret-token
+        ports:
+        - containerPort: 4200
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: springboot-angular-example
+spec:
+  selector:
+    app: springboot-angular-example
+  ports:
+    - name: angular
+      protocol: TCP
+      port: 80
+      targetPort: 4200
+    - name: springboot
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  type: LoadBalancer

@@ -4,12 +4,14 @@ WORKDIR /usr/src/app
 
 COPY package*.json ./
 
+RUN npm install -g @angular/cli
+
 RUN npm install
 
-RUN npm install -g @angular/cli
+COPY proxy.conf.json .
 
 COPY . .
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "0.0.0.0"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--proxy-config", "proxy.conf.json"]
