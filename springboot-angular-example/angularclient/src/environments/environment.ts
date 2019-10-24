@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  usersUrl: "USERS_URL"
+  usersUrl: "USERS_URL",
+  apmUrl: "APM_URL"
 };
 
 /*

@@ -4,10 +4,6 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import * as apm from 'elastic-apm-node/start'
-
-//apm.start();
-
 if (environment.production) {
   enableProdMode();
 }
