@@ -1,0 +1,23 @@
+apiVersion: kibana.k8s.elastic.co/v1beta1
+kind: Kibana
+metadata:
+  name: quickstart2
+spec:
+  version: 7.4.1
+  count: 1
+  http:
+    service:
+      spec:
+        type: LoadBalancer
+        ports:
+        - port: 5602
+          targetPort: 5601
+  config:
+    apm_oss.indexPattern: apm-2-*
+    apm_oss.errorIndices: apm-2-*
+    apm_oss.onboardingIndices: apm-2-*
+    apm_oss.spanIndices: apm-2-*
+    apm_oss.transactionIndices: apm-2-*
+    kibana.index: .kibana_app2
+  elasticsearchRef:
+    name: quickstart

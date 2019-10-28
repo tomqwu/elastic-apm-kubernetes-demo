@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: springboot-angular-example
+  name: springboot-angular-example2
   labels:
-    app: springboot-angular-example
+    app: springboot-angular-example2
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: springboot-angular-example
+      app: springboot-angular-example2
   template:
     metadata:
       labels:
-        app: springboot-angular-example
+        app: springboot-angular-example2
     spec:
       containers:
       - name: springboot
@@ -29,21 +29,21 @@ spec:
         #     cpu: "1"
         env:
         - name: ANGULAR_UPSTREAM_URL
-          value: "http://localhost:80"
+          value: "http://localhost:81"
         - name: ELASTIC_APM_ACTIVE
           value: "true"
         - name: ELASTIC_APM_APPLICATION_PACKAGES
           value: "com.example,org.example"
         - name: ELASTIC_APM_SERVICE_NAME
-          value: "angular-springboot-apm-example-springboot"
+          value: "angular-springboot-apm-example-springboot2"
         - name: ELASTIC_APM_SERVER_URLS
-          value: "https://apm-server-quickstart-apm-http:8200"
+          value: "https://apm-server-quickstart2-apm-http:8201"
         - name: ELASTIC_APM_VERIFY_SERVER_CERT
           value: "false"
         - name: ELASTIC_APM_SECRET_TOKEN
           valueFrom:
             secretKeyRef:
-              name: apm-server-quickstart-apm-token
+              name: apm-server-quickstart2-apm-token
               key: secret-token
       - name: angular
         image: tomqwu/springboot-angular-example-angular-client:latest
@@ -63,15 +63,15 @@ spec:
         - name: ELASTIC_APM_APPLICATION_PACKAGES
           value: "com.example,org.example"
         - name: ELASTIC_APM_SERVICE_NAME
-          value: "angular-springboot-apm-example-angular-client"
+          value: "angular-springboot-apm-example-angular-client2"
         - name: ELASTIC_APM_SERVER_URLS
-          value: "https://apm-server-quickstart-apm-http:8200"
+          value: "https://apm-server-quickstart2-apm-http:8201"
         - name: ELASTIC_APM_VERIFY_SERVER_CERT
           value: "false"
         - name: ELASTIC_APM_SECRET_TOKEN
           valueFrom:
             secretKeyRef:
-              name: apm-server-quickstart-apm-token
+              name: apm-server-quickstart2-apm-token
               key: secret-token
         ports:
         - containerPort: 4200
@@ -79,17 +79,17 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: springboot-angular-example
+  name: springboot-angular-example2
 spec:
   selector:
-    app: springboot-angular-example
+    app: springboot-angular-example2
   ports:
     - name: angular
       protocol: TCP
-      port: 80
+      port: 81
       targetPort: 4200
     - name: springboot
       protocol: TCP
-      port: 8080
+      port: 8081
       targetPort: 8080
   type: LoadBalancer

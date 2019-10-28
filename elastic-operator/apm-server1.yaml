@@ -1,0 +1,67 @@
+apiVersion: apm.k8s.elastic.co/v1beta1
+kind: ApmServer
+metadata:
+  name: apm-server-quickstart
+  namespace: default
+spec:
+  version: 7.4.1
+  count: 1
+  secureSettings:
+  - secretName: quickstart-es-elastic-user
+  config:
+    apm-server:
+      ssl:
+        enabled: true
+      rum:
+        enabled: true
+        allow_origins: ['*']
+    output:
+      elasticsearch:
+        index: "apm-1-%{[observer.version]}-%{+yyyy.MM.dd}"
+        username: elastic
+        password: "${elastic}"
+        protocol: "https"
+        ssl.certificate_authorities: ["/usr/share/apm-server/config/elasticsearch-certs/tls.crt"]
+        # indices:
+        #   - index: "apm-1-%{[observer.version]}-sourcemap"
+        #     when.contains: 
+        #       processor.event: "sourcemap"
+
+        #   - index: "apm-1-%{[observer.version]}-error-%{+yyyy.MM.dd}"
+        #     when.contains:
+        #       processor.event: "error"
+
+        #   - index: "apm-1-%{[observer.version]}-transaction-%{+yyyy.MM.dd}"
+        #     when.contains:
+        #       processor.event: "transaction"
+
+        #   - index: "apm-1-%{[observer.version]}-span-%{+yyyy.MM.dd}"
+        #     when.contains:
+        #       processor.event: "span"
+
+        #   - index: "apm-1-%{[observer.version]}-metric-%{+yyyy.MM.dd}"
+        #     when.contains:
+        #       processor.event: "metric"
+
+        #   - index: "apm-1-%{[observer.version]}-onboarding-%{+yyyy.MM.dd}"
+        #     when.contains:
+        #       processor.event: "onboarding"
+    setup:
+      template:
+        enabled: true
+        name: "apm-server-1-%{[observer.version]}"
+        pattern: "apm-1-*"
+        settings:
+          index:
+            number_of_shards: 1
+            number_of_replicas: 1
+  http:
+    service:
+      spec:
+        type: LoadBalancer
+        ports:
+        - port: 8200
+          targetPort: 8200
+
+  elasticsearchRef:
+    name: quickstart

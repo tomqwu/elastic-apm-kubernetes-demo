@@ -1,0 +1,43 @@
+apiVersion: apm.k8s.elastic.co/v1beta1
+kind: ApmServer
+metadata:
+  name: apm-server-quickstart2
+  namespace: default
+spec:
+  version: 7.4.1
+  count: 1
+  secureSettings:
+  - secretName: quickstart-es-elastic-user
+  config:
+    apm-server:
+      ssl:
+        enabled: true
+      rum:
+        enabled: true
+        allow_origins: ['*']
+    output:
+      elasticsearch:
+        index: "apm-2-%{[observer.version]}-%{+yyyy.MM.dd}"
+        username: elastic
+        password: "${elastic}"
+        protocol: "https"
+        ssl.certificate_authorities: ["/usr/share/apm-server/config/elasticsearch-certs/tls.crt"]
+    setup:
+      template:
+        enabled: true
+        name: "apm-server-2-%{[observer.version]}"
+        pattern: "apm-2-*"
+        settings:
+          index:
+            number_of_shards: 1
+            number_of_replicas: 1
+  http:
+    service:
+      spec:
+        type: LoadBalancer
+        ports:
+        - port: 8201
+          targetPort: 8200
+
+  elasticsearchRef:
+    name: quickstart
